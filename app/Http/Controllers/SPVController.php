@@ -90,9 +90,19 @@ class SPVController extends Controller
 
     public function destroy($id)
     {
-        $stock = StockItem::findOrFail($id);
-        $stock->delete();
+        try {
+            $stock = StockItem::findOrFail($id);
+            $stock->delete();
 
-        return redirect()->route('spv.master')->with('success', 'Data berhasil diperbarui!');
+            // Mengembalikan respons JSON untuk AJAX
+            return response()->json([
+                'message' => 'Data berhasil dihapus!'
+            ], 200);
+        } catch (\Exception $e) {
+            // Menangani jika terjadi kesalahan
+            return response()->json([
+                'message' => 'Gagal menghapus data. Silakan coba lagi.'
+            ], 500);
+        }
     }
 }

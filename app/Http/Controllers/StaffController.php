@@ -49,4 +49,27 @@ class StaffController extends Controller
         // Redirect kembali ke halaman create dengan pesan sukses
         return redirect()->route('staff.create')->with('success', 'Data barang berhasil ditambahkan');
     }
+
+    public function addStock(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|exists:stock_items,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $stockItem = StockItem::where('name', $request->name)->first();
+
+        if ($stockItem) {
+            $stockItem->quantity += $request->jumlah;
+            $stockItem->save();
+
+            return response()->json([
+                'message' => 'Stok barang berhasil ditambahkan!',
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Barang tidak ditemukan!',
+        ], 404);
+    }
 }

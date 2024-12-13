@@ -37,9 +37,17 @@ class SupplierController extends Controller
 
     public function destroy($id)
     {
-        $stock = Supplier::findOrFail($id);
-        $stock->delete();
+        try {
+            $category = Supplier::findOrFail($id); // Mencari kategori berdasarkan ID
+            $category->delete(); // Menghapus kategori dari database
 
-        return redirect()->route('spv.supplier')->with('success', 'Data berhasil dihapus');
+            return response()->json([
+                'message' => 'Supplier berhasil dihapus!'
+            ], 200); // Mengembalikan respons sukses
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal menghapus Supplier. Silakan coba lagi.'
+            ], 500); // Mengembalikan respons error jika terjadi kesalahan
+        }
     }
 }

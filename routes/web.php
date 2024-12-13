@@ -43,4 +43,4 @@ Route::post('/dashboard/update-stock/{id}', [SPVController::class, 'update'])->n
 // ROute Delete
 Route::delete('/spv/supplier/destroy/{id}', [SupplierController::class, 'destroy'])->name('spv.destroy');
 Route::delete('/spv/master-data/destroy/{id}', [SPVController::class, 'destroy'])->name('spv.master.destroy');
-Route::delete('/spv/category/destroy/{id}', [SPVController::class, 'destroy'])->name('spv.category.destroy');
+Route::delete('/spv/category/destroy/{id}', [CategoryController::class, 'destroy'])->name('spv.category.destroy');

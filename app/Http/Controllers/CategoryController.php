@@ -33,9 +33,17 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
+        try {
+            $category = Category::findOrFail($id); // Mencari kategori berdasarkan ID
+            $category->delete(); // Menghapus kategori dari database
 
-        return redirect()->route('spv.category.destroy')->with('succes', 'Category Berhasil Dihapus');
+            return response()->json([
+                'message' => 'Kategori berhasil dihapus!'
+            ], 200); // Mengembalikan respons sukses
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal menghapus kategori. Silakan coba lagi.'
+            ], 500); // Mengembalikan respons error jika terjadi kesalahan
+        }
     }
 }

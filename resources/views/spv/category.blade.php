@@ -68,17 +68,13 @@
         </thead>
         <tbody>
             @foreach ($categories as $category)
-            <tr>
+            <tr id="category_{{ $category->id }}">
                 <td>{{ $category->id }}</td>
                 <td>{{ $category->name }}</td>
                 <td>
-                    <form action="{{ route('spv.category.destroy', $category->id) }}" method="POST"
-                        style="display:inline-block;"
-                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
-                    </form>
+                    <button class="btn btn-danger" id="btn-delete-category" data-id="{{ $category->id }}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </td>
             </tr>
             @endforeach
@@ -104,4 +100,59 @@
     });
 </script>
 @endif
+
+<script>
+    $('body').on('click', '#btn-delete-category', function() {
+        let category_id = $(this).data('id'); // Mengambil ID kategori dari tombol
+        let token = $("meta[name='csrf-token']").attr("content"); // Mengambil token CSRF
+
+
+        // Konfirmasi dengan SweetAlert
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data ini akan dihapus!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Kirim request AJAX ke server untuk menghapus kategori
+                $.ajax({
+                    url: `/spv/category/destroy/${category_id}`,
+                    type: 'DELETE',
+                    data: {
+                        "_token": token
+                    },
+                    success: function(response) {
+                        // Jika berhasil, tampilkan alert sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        // Hapus baris tabel yang bersangkutan
+                        $(`#category_${category_id}`).fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Jika ada error, tampilkan alert error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Gagal menghapus kategori. Silakan coba lagi.',
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 @endsection

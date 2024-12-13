@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createDataModal">
         Buat Stock
     </button>
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createDataModal">
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStockModal">
         Tambah Stock
     </button>
 
@@ -89,19 +89,22 @@
         </div>
     </div>
 </div>
+
+<!---->
+
 @endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 @if(Session::has('success'))
 <script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: "{{ Session::get('success') }}",
-        showConfirmButton: false,
-        timer: 1500
-    });
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: "{{ Session::get('success') }}",
+    showConfirmButton: false,
+    timer: 1500
+});
 </script>
 @endif
 

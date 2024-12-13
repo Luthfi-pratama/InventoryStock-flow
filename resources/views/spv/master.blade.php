@@ -58,10 +58,8 @@
                 <td>{{ $stock->category ? $stock->category->name : 'Tidak ada kategori' }}</td>
                 <td>{{ $stock->supplier ? $stock->supplier->name : 'Tidak ada supplier' }}</td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#ModalEdit{{$stock->id}}">
-                        <i class="fas fa-edit"></i>
-                    </button>
+                    <a class="btn btn-primary" href="{{url($stock->id.'/edit-stock')}}" data-toggle="modal"
+                        data-target="#ModalEdit"><i class="fas fa-edit"></i></a>
                     <button type="button" class="btn btn-danger" id="btn-delete-stock" data-id="{{ $stock->id }}">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -119,7 +117,17 @@
                             showConfirmButton: false,
                             timer: 3000
                         });
-                        $('#index_' + stock_id).fadeOut();
+                        // Menghapus elemen baris dari tabel dengan animasi
+                        $('#index_' + stock_id).fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Data gagal dihapus.',
+                        });
                     }
                 });
             }
