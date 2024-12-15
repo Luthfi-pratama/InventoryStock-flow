@@ -44,3 +44,16 @@ Route::post('/dashboard/update-stock/{id}', [SPVController::class, 'update'])->n
 Route::delete('/spv/supplier/destroy/{id}', [SupplierController::class, 'destroy'])->name('spv.destroy');
 Route::delete('/spv/master-data/destroy/{id}', [SPVController::class, 'destroy'])->name('spv.master.destroy');
 Route::delete('/spv/category/destroy/{id}', [CategoryController::class, 'destroy'])->name('spv.category.destroy');
+
+
+//route Print PDF
+Route::prefix('manager')->name('manager.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [ManagerController::class, 'index'])->name('dashboard-mngr');
+
+    // Cetak Data (unduh PDF)
+    Route::get('/cetak-data', [ManagerController::class, 'cetakData'])->name('cetak-data');
+
+    // Preview PDF
+    Route::get('/preview-pdf', [ManagerController::class, 'previewData'])->name('preview-pdf');
+});
